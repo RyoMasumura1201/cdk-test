@@ -37,10 +37,20 @@ export class CdkTestStack extends Stack {
       cidrBlock: "10.0.0.0/24",
     });
 
+    eastSubnet.addDefaultInternetRoute(
+      internetGateway.ref,
+      vpcGatewayAttachment
+    );
+
     const westSubnet = new PublicSubnet(this, "west-subnet", {
       availabilityZone: "ap-northeast-1c",
       vpcId: vpc.vpcId,
       cidrBlock: "10.0.1.0/24",
     });
+
+    westSubnet.addDefaultInternetRoute(
+      internetGateway.ref,
+      vpcGatewayAttachment
+    );
   }
 }
