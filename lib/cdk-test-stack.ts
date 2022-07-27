@@ -1,6 +1,12 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { Vpc, PublicSubnet, Instance } from "aws-cdk-lib/aws-ec2";
+import {
+  Vpc,
+  PublicSubnet,
+  Instance,
+  CfnInternetGateway,
+  CfnVPCGatewayAttachment,
+} from "aws-cdk-lib/aws-ec2";
 
 export class CdkTestStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -10,6 +16,20 @@ export class CdkTestStack extends Stack {
       availabilityZones: ["ap-northeast-1a", "ap-northeast-1c"],
       subnetConfiguration: [],
     });
+
+    const internetGateway = new CfnInternetGateway(
+      this,
+      "CDKTestInternetgateway"
+    );
+
+    const vpcGatewayAttachment = new CfnVPCGatewayAttachment(
+      this,
+      "GatewayAttachment",
+      {
+        vpcId: vpc.vpcId,
+        internetGatewayId: internetGateway.ref,
+      }
+    );
 
     const eastSubnet = new PublicSubnet(this, "east-subnet", {
       availabilityZone: "ap-northeast-1a",
