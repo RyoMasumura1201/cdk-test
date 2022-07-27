@@ -1,13 +1,13 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { Vpc, PublicSubnet } from "aws-cdk-lib/aws-ec2";
+import { Vpc, PublicSubnet, Instance } from "aws-cdk-lib/aws-ec2";
 
 export class CdkTestStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const vpc = new Vpc(this, "CDKTest", {
-      maxAzs: 2,
+      availabilityZones: ["ap-northeast-1a", "ap-northeast-1c"],
       subnetConfiguration: [],
     });
 
